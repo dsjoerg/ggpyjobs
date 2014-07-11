@@ -68,19 +68,11 @@ let me know so I can improve this README.
 * `cp config_example/s3.yml config`
 * customize config/s3.yml, putting your AWS details in
 * `cp config_example/database.yml config`
+* `mkdir testcache`
 
 Install the various requirements. PIL may require external libraries to be installed.
 
 * `pip install -r requirements.txt`
-
-
-Set up your environment variables
-* `GGFACTORY_CACHE_DIR` (required): Sets a directory to cache remote
-  files used to load SC2 resources. Use full path.
-* `DJANGO_SECRETKEY` (required): Sets the SECRETKEY in the django
-  settings.py file.
-* `GGPYJOBS_CONFIG_PATH` (required in testing): The directory where
-  the config files s3.yml and database.yml are found for test runs.
 
 Run the tests to verify a successful setup:
 > GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse
@@ -94,6 +86,19 @@ OK
 
 Run specific tests like this:
 > GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse.SC2ReaderToEsdbTestCase.test_close_replays
+
+
+Environment Variables
+======================
+
+As you may have noticed in the test-running commands above, ggpyjobs
+uses the following environment variables:
+* `GGFACTORY_CACHE_DIR` (required): Sets a directory to cache remote
+  files used to load SC2 resources. Use full path.
+* `DJANGO_SECRETKEY` (required): Sets the SECRETKEY in the django
+  settings.py file.
+* `GGPYJOBS_CONFIG_PATH` (required in testing): The directory where
+  the config files s3.yml and database.yml are found for test runs.
 
 
 Keeping up to Date
