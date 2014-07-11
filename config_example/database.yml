@@ -1,0 +1,15 @@
+default: &default
+  adapter: mysql2
+  username: root
+  host: 127.0.0.1
+  password: 
+  socket: /var/mysql/mysql.sock
+  reconnect: true
+
+development:
+  <<: *default
+  database: esdb_development
+
+test:
+  <<: *default
+  database: esdb_test

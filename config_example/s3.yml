@@ -1,0 +1,45 @@
+development: &development
+  replays:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: A_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+  matchblobs:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+  minimaps:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: YET_ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+  s2gs:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: YET_ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+
+test:
+  replays:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: YET_ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+  matchblobs:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: YET_ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
+  minimaps:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+    endpoint: s3.amazonaws.com
+    bucket: YET_ANOTHER_UNIQUE_BUCKET_NAME
+    s3_host_alias:
