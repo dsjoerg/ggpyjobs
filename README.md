@@ -1,4 +1,3 @@
-
 Introduction
 ===============
 
@@ -9,13 +8,44 @@ codebase; ggpyjobs retrieves these from queue, and performs the
 requested parsing work.
 
 This codebase is useful to read if you're wondering how GGTracker
-extracts some piece of information from replay files.
+extracts information from replay files.  See the 'Plugins' section
+below.
 
-If you want GGTracker to show a new piece of information, the steps
-include:
+If you want GGTracker to show a new piece of information, the steps to
+do that include:
 * add the necessary processing code here, in ggpyjobs
 * modify the GGTracker web + Angular code to show the new piece of
   information
+
+
+Plugins
+===============
+
+ggpyjobs uses the [sc2reader](https://github.com/graylinkim/sc2reader)
+library to parse replays.
+
+In sc2parse/plugins.py there are various 'plugins' to sc2reader that compute additional things from each replay file.
+
+The plugins are:
+* EngagementTracker -- identifies major combat engagements and
+  measures total value of things lost by each player
+* ZergMacroTracker -- measures inject efficiency, and active inject
+  time per base; distinguishes 'macro hatches'
+* ProtossTerranMacroTracker -- tracks energy for each nexus and
+  orbital, measures time spent at max energy
+* MiningBaseIdentifier -- identifies which bases are in mining
+  locations (as opposed to, for example, macro hatches)
+* ScoutingTracker -- detects when the first scout command was issued
+  to a worker
+* UpgradesTracker -- retrieves the list of upgrades and timings per
+  player
+* ArmyTracker -- retrieves total and per-minute unit counts
+* WWPMTracker -- measures 'worker waves per minute', no longer displayed on GGTracker
+* BaseTracker -- no longer used since 2.0.8
+* TrainingTracker -- no longer used since 2.0.8
+* ActivityTracker -- no longer used since 2.0.8
+* OwnershipTracker -- no longer used since 2.0.8
+* LifeSpanTracker -- no longer used since 2.0.8
 
 
 Requirements
@@ -23,7 +53,7 @@ Requirements
 
  * MySQL
  * Python 2.X
- * Redis
+ * Redis (when running as part of GGTracker)
 
 
 Installation
@@ -49,18 +79,27 @@ Set up your environment variables
   files used to load SC2 resources. Use full path.
 * `DJANGO_SECRETKEY` (required): Sets the SECRETKEY in the django
   settings.py file.
+* `GGPYJOBS_CONFIG_PATH` (required in testing): The directory where
+  the config files s3.yml and database.yml are found for test runs.
 
 Run the tests to verify a successful setup:
-> GGFACTORY_CACHE_DIR=testcache ./manage.py test sc2parse
+> GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse
+
+There will be some output; at the end, if all is well, it will say something like:
+```
+Ran 26 tests in 41.357s
+
+OK
+```
 
 Run specific tests like this:
-> GGFACTORY_CACHE_DIR=testcache ./manage.py test sc2parse.SC2ReaderToEsdbTestCase.test_close_replays
+> GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse.SC2ReaderToEsdbTestCase.test_close_replays
 
 
 Keeping up to Date
 =====================
 
-When you pull down changes to the `requirements.txt` file:
+If there are changes to the `requirements.txt` file, run this:
 
 > $ pip install --upgrade -r requirements.txt
 
@@ -69,16 +108,14 @@ When you pull down changes to the `requirements.txt` file:
 Working on sc2reader
 ========================
 
-Development work on sc2reader requires a manual uninstall of the
-sc2reader version installed by the requirements file followed by
-an installation from a local copy of the ggtracker/sc2reader repo.
+If you want ggpyjobs to use a customized version of sc2reader:
 
 > $ pip uninstall sc2reader
 > $ cd path/to/ggtracker/sc2reader
 > $ python setup.py develop
 
-When installed in develop mode sc2reader will automatically reflect
-changes to the code base it was installed from. Please note that
-a worker running as a daemon will *not* automatically reflect changes
-to the code made since the process began running. The worker must be
-shut down and restarted to pick up the code changes.
+When installed in this 'develop mode', sc2reader will automatically
+reflect changes to the code base it was installed from. Please note
+that a worker running as a daemon will *not* automatically reflect
+changes to the code made since the process began running. The worker
+must be shut down and restarted to pick up the code changes.

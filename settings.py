@@ -166,7 +166,7 @@ LOGGING = {
 # dev and prod config happens in ggtracker/utils.py
 env = 'test'
 config_path = os.environ['GGPYJOBS_CONFIG_PATH']
-s3cfg = yaml.load(open(config_path + '/config/s3.yml'))
+s3cfg = yaml.load(open(config_path + '/s3.yml'))
 AWS_ACCESS_KEY_ID = s3cfg[env]['minimaps']['access_key_id']
 AWS_SECRET_ACCESS_KEY = s3cfg[env]['minimaps']['secret_access_key']
 MINIMAP_BUCKET_NAME = s3cfg[env]['minimaps']['bucket']
