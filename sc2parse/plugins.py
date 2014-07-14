@@ -1390,6 +1390,15 @@ def ProtossTerranMacroTracker(replay):
     return replay
 
 
+# this plugin sets replay.eblob to be a list of engagements. Each engagement is a list, containing:
+# * frame when engagement started
+# * frame when engagement ended
+# * value of team 1's army at start of engagement
+# * value of team 1's army units lost during engagement
+# * value of team 1's non-army units and buildings lost during engagement
+# * value of team 2's army at start of engagement
+# * value of team 2's army units lost during engagement
+# * value of team 2's non-army units and buildings lost during engagement
 @plugin
 def EngagementTracker(replay):
 
