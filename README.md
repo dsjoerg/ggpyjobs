@@ -14,8 +14,8 @@ below.
 If you want GGTracker to show a new piece of information, the steps to
 do that include:
 * add the necessary processing code here, in ggpyjobs
-* modify the GGTracker web + Angular code to show the new piece of
-  information
+* modify the GGTracker web + Angular code (not yet public, but
+  Soon™) to show the new piece of information
 
 
 Plugins
