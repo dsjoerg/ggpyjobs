@@ -1622,7 +1622,8 @@ def UpgradesTracker(replay):
   efilter = lambda e: (isinstance(e, UpgradeCompleteEvent) and e.frame > 0)
   ues = filter(efilter, replay.tracker_events)
   for ue in ues:
-    ue.player.upgrades.append([ue.upgrade_type_name, ue.frame])
+    if hasattr(ue, 'player') and ue.player is not None:
+      ue.player.upgrades.append([ue.upgrade_type_name, ue.frame])
 
   return replay
 
