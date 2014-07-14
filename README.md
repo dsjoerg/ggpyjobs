@@ -88,6 +88,17 @@ Run specific tests like this:
 > GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse.SC2ReaderToEsdbTestCase.test_close_replays
 
 
+Parsing a replay with the extra ggpyjobs plugins
+================================================
+```
+GGFACTORY_CACHE_DIR=testcache python
+from sc2parse import ggfactory
+replay = ggfactory.load_replay('/path/to/a/replay.SC2Replay')
+print replay.players[0].upgrades
+print replay.eblob
+```
+
+
 Environment Variables
 ======================
 
