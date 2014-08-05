@@ -560,6 +560,12 @@ class SC2ReaderToEsdb():
       blob["macro"].append([ptoi[player], blobhatches])
 
 
+  # num_bases is a map from player id to a list of
+  # [base_construction_complete, base_destroyed, base_construction_began]
+  # frame times for that player's bases.
+  #
+  # (they are in this weird order for historical backward-compatibility reasons)
+  #
   def populateBlobWithNumBases(self, blob, replay, ptoi):
 
       blob["num_bases"] = list()
@@ -570,7 +576,7 @@ class SC2ReaderToEsdb():
           base_lives = list()
           for base in player.bases:
               if getattr(base, "finished_at", None) != None and getattr(base, 'died_at', None) != None:
-                  base_lives.append([base.finished_at, base.died_at])
+                  base_lives.append([base.finished_at, base.died_at, base.started_at])
           blob["num_bases"].append([ptoi[player], base_lives])
 
 
@@ -1203,13 +1209,14 @@ class SC2ReaderToEsdb():
       return None
 
 
-  # bases is a list of [start, end] frame times for the bases
+  # bases is a list of [construction_complete, base_destroyed, construction_began] frame times for the bases
+  # (they are in this weird order for historical backward-compatibility reasons)
   #
   # returns a list of [frame, num_bases] values, indicating how
   # many bases the player had at that time.
   #
   def compute_base_xy(self, basetimes):
-    flat_basetimes = [item for sublist in basetimes for item in sublist]
+    flat_basetimes = [item for sublist in basetimes for item in sublist[0:2]]
     unique_sorted_basetimes = sorted(list(set(flat_basetimes)))
     bases_alive_at_time = list()
     for time in unique_sorted_basetimes:
