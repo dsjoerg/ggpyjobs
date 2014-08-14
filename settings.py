@@ -171,6 +171,10 @@ AWS_ACCESS_KEY_ID = s3cfg[env]['minimaps']['access_key_id']
 AWS_SECRET_ACCESS_KEY = s3cfg[env]['minimaps']['secret_access_key']
 MINIMAP_BUCKET_NAME = s3cfg[env]['minimaps']['bucket']
 
+WCS_TOKEN = 'foo'
+WCS_TOKEN_2 = 'bar'
+ESL_TOKEN = 'baz'
+
 if socket.gethostname() == "David-Joergs-MacBook-Pro.local":
     from settings_dev import *
 
