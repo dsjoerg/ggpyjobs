@@ -38,6 +38,8 @@ def django_setup():
     dbcfg = yaml.load(open(options.path + '/config/database.yml'))
     s3cfg = yaml.load(open(options.path + '/config/s3.yml'))
     rediscfg = yaml.load(open(options.path + '/config/redis.yml'))
+    token_cfg = yaml.load(open(options.path + '/config/tokens.yml'))
+
     settings.configure(
       DATABASES = {
         'default': {
@@ -59,6 +61,10 @@ def django_setup():
       
       # Yea, screw it, we'll just misuse django :)
       REDIS_SERVER = rediscfg[env]['host'] + ':' + str(rediscfg[env]['port']),
+
+      WCS_TOKEN = token_cfg['wcs_token'],
+      WCS_TOKEN_2 = token_cfg['wcs_token_2'],
+      ESL_TOKEN = token_cfg['esl_token']
     )
 
   # Add vendor to the path, who cares if it is twice

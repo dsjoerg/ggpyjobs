@@ -121,9 +121,11 @@ class SC2ReaderToEsdb():
     blob["camera"] = []
 
     cobrand = None
-    if u'wcs_token' == channel:
+    if settings.WCS_TOKEN == channel:
       cobrand = 1
-    if u'esl_ist_die_beste' == channel:
+    if settings.WCS_TOKEN_2 == channel:
+      cobrand = 1
+    if settings.ESL_TOKEN == channel:
       cobrand = 2
 
     matchDB, created = self.getOrCreateMatchDB(replay, cobrand)
