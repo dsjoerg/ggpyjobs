@@ -55,7 +55,7 @@ def django_setup():
       AWS_ACCESS_KEY_ID = s3cfg[env]['minimaps']['access_key_id'],
       AWS_SECRET_ACCESS_KEY = s3cfg[env]['minimaps']['secret_access_key'],
       MINIMAP_BUCKET_NAME = s3cfg[env]['minimaps']['bucket'],
-      S2GS_BUCKET_NAME = s3cfg[env]['s2gs']['bucket'],
+      S2GS_BUCKET_NAME = 'foo',
       REPLAY_BUCKET_NAME = s3cfg[env]['replays']['bucket'],
       BLOB_BUCKET_NAME = s3cfg[env]['matchblobs']['bucket'],
       
