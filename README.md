@@ -14,8 +14,15 @@ below.
 If you want GGTracker to show a new piece of information, the steps to
 do that include:
 * add the necessary processing code here, in ggpyjobs
-* modify the GGTracker web + Angular code (not yet public, but
-  Soon™) to show the new piece of information
+* modify the other parts of GGTracker to work correctly with the new
+  piece of information
+
+The other codebases used in GGTracker are:
+* https://github.com/dsjoerg/ggtracker <-- the web server and
+  HTML/CSS/Javascript for the site
+* https://github.com/dsjoerg/esdb <-- the API server
+* https://github.com/dsjoerg/gg <-- little gem for accessing ESDB,
+  used by the ggtracker codebase
 
 
 Plugins
