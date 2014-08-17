@@ -142,3 +142,9 @@ reflect changes to the code base it was installed from. Please note
 that a worker running as a daemon will *not* automatically reflect
 changes to the code made since the process began running. The worker
 must be shut down and restarted to pick up the code changes.
+
+
+### I don't understand XXXX
+
+Just ask, I'll add questions and answers to a FAQ here.
+
