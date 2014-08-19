@@ -29,7 +29,7 @@ for player in replay.players:
   fixation_start_frame = 0
 
   action_latency_timestamps = player.action_latency * 4.0
-  action_latency_real_seconds = player.action_latency / (8.0 * 1.38)
+  action_latency_real_seconds = player.action_latency / (16.0 * 1.38)
   print "Player {} had action latency = {:.1f} frames, {:.1f} timestamps, {:.2f} real seconds".format(player, player.action_latency, action_latency_timestamps, action_latency_real_seconds)
   
   verbose = False
