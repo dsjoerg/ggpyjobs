@@ -79,7 +79,7 @@ class Entity(models.Model):
     color = models.CharField(max_length=6, null=True, blank=True)
     race_macro = models.FloatField(null=True)
     max_creep_spread = models.FloatField(null=True)
-    action_latency = models.FloatField(null=True)
+    action_latency_real_seconds = models.FloatField(null=True)
 
     u0 = models.IntegerField(null=True)  # number of unit 0 that were ever in the active army
     u1 = models.IntegerField(null=True)

@@ -967,7 +967,9 @@ class SC2ReaderToEsdb():
       if player.max_creep_spread != 0:
         entityDB.max_creep_spread = player.max_creep_spread[1]
 
-    entityDB.action_latency = player.action_latency
+    # player.action_latency is in frames.  ESDB's action_latency field is in real seconds.
+    # 16 frames per game second, 1.38 game seconds per real second.
+    entityDB.action_latency_real_seconds = player.action_latency / (16.0 * 1.38)
 
     ta = player.total_army
     for unitnum in range(0, MAX_NUM_UNITS):
