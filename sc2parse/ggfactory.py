@@ -3,6 +3,7 @@ import sc2reader
 
 from sc2reader.factories.plugins.replay import APMTracker, SelectionTracker
 from sc2parse.plugins import WWPMTracker, TrainingTracker, ActivityTracker, OwnershipTracker, LifeSpanTracker, ArmyTracker, ZergMacroTracker, BaseTracker, ProtossTerranMacroTracker, EngagementTracker, MiningBaseIdentifier, MapFileDepotFixer, ScoutingTracker, UpgradesTracker
+from sc2parse.skillcraft import ScreenFixationIDT, PACStats
 from sc2reader import engine
 from sc2reader.engine.plugins import CreepTracker
 #from sc2reader.engine.plugins import CreepTracker, HotkeyCount
@@ -43,6 +44,11 @@ class GGFactory(sc2reader.factories.DoubleCachedSC2Factory):
 
         # Requires Base Tracking
         self.register_plugin('Replay',ScoutingTracker())
+
+        # Skillcraft plugins; order matters
+        self.register_plugin('Replay',ScreenFixationIDT())
+        self.register_plugin('Replay',PACStats())
+
 
 
 # The cache_dir is where remote files get cached to avoid

@@ -967,6 +967,8 @@ class SC2ReaderToEsdb():
       if player.max_creep_spread != 0:
         entityDB.max_creep_spread = player.max_creep_spread[1]
 
+    entityDB.action_latency = player.action_latency
+
     ta = player.total_army
     for unitnum in range(0, MAX_NUM_UNITS):
       setattr(entityDB, "u%(unitnum)i" % {"unitnum": unitnum}, ta[unitnum])
