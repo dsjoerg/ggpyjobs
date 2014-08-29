@@ -203,7 +203,7 @@ class SC2ReaderToEsdb():
       for blob_name in blob_names:
           matchblob[blob_name] = defaultdict(list)
 
-      players_we_track = [player for player in playerToIdentityId]
+      players_we_track = [player for player in playerToIdentityId if playerToIdentityId[player] > 0]
       expected_player_count = len(players_we_track)
       def gatherstats(now, stats, matchblob):
           if len(stats) == expected_player_count:
@@ -230,7 +230,7 @@ class SC2ReaderToEsdb():
               now = event.frame
 
           # TODO: Get the ident_id instead
-          if event.player in playerToIdentityId:
+          if event.player in players_we_track:
               stats[playerToIdentityId[event.player]] = event
 
       # Gather that last set of stats
