@@ -861,7 +861,12 @@ class SC2ReaderToEsdb():
       matchDB.game_type = replay.real_type
       matchDB.category = replay.category
       matchDB.duration_seconds = replay.length.seconds
-      matchDB.expansion = 1 if replay.expansion == 'HotS' else 0
+      if replay.expansion == 'HotS':
+        matchDB.expansion = 1
+      elif replay.expansion == 'LotV':
+        matchDB.expansion = 2
+      else:
+        matchDB.expansion = 0
       matchDB.gateway = normalize_gateway(replay.gateway)
 
       # highest_league is 8 for unranked matches.  so if none of the

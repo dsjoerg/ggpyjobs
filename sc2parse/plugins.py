@@ -151,7 +151,71 @@ unit_data = {'WoL':
     (True,'swarmhost', [200,100,3]),
     (True,'viper', [100,200,3]),
 
-]} }
+]},
+'LotV':    {'Protoss':[
+    (False,'probe', [50,0,1]),
+    (True,'zealot', [100,0,2]),
+    (True,'sentry', [50,100,2]),
+    (True,'stalker', [125,50,2]),
+    (True,'hightemplar', [50,150,2]),
+    (True,'darktemplar', [125,125,2]),   #5
+    (True,'immortal', [250,100,4]),
+    (True,'colossus', [300,200,6]),
+    (True,'archon', [175,275,4]), # Can't know the cost, split the difference.
+    (True,'observer', [25,75,1]),
+    (True,'warpprism', [200,0,2]),       #10
+    (True,'phoenix', [150,100,2]),
+    (True,'voidray', [250,150,4]),
+    (True,'carrier', [350,250,6]),
+    (True,'mothership', [400,400,8]),  # includes mothershipcore cost
+    (True,'photoncannon', [150,0,0]),    #15
+    (True,'oracle', [150,150,3]),
+    (True,'tempest', [300,200,4]),
+    (True,'mothershipcore', [100,100,2]),
+    #(True,'interceptor', [25,0,0]), # This is technically a army unit
+
+],'Terran':[
+    (False,'scv', [50,0,1]), #0
+    (True,'marine', [50,0,1]),
+    (True,'marauder', [100,25,2]),
+    (True,'reaper', [50,50,1]),
+    (True,'ghost', [200,100,2]),
+    (True,'hellion', [100,0,2]), #5
+    (True,'siegetank', [150,125,2]),
+    (True,'thor', [300,200,6]),
+    (True,'viking', [150,75,2]),
+    (True,'medivac', [100,100,2]),
+    (True,'banshee', [150,100,3]),# 10
+    (True,'raven', [100,200,2]),
+    (True,'battlecruiser', [400,300,6]),
+    (True,'planetaryfortress', [150,150,0]),
+    (True,'missileturret', [100,0,0]),
+    (True,'widowmine', [75,25,2]), #15
+
+],'Zerg':[
+    # Cumulative costs, including drone costs
+    (False,'drone', [50,0,1]),
+    (True,'zergling', [25,0,.5]),
+    (True,'queen', [150,0,2]),
+    (True,'baneling', [50,25,.5]),
+    (True,'roach', [75,25,2]),
+    (False,'overlord', [100,0,0]),
+    (True,'overseer', [50,50,0]),       # dont include the overlord cost because we arent including costs of pylons or supply depots
+    (True,'hydralisk', [100,50,2]),
+    (True,'spinecrawler', [150,0,0]),
+    (True,'sporecrawler', [125,0,0]),
+    (True,'mutalisk', [100,100,2]),
+    (True,'corruptor', [150,100,2]),
+    (True,'broodlord', [300,250,4]),
+    (True,'broodling', [0,0,0]),
+    (True,'infestor', [100,150,2]),
+    (True,'infestedterran', [0,0,0]),
+    (True,'ultralisk', [300,200,6]),
+    (False,'nydusworm', [100,100,0]),
+    (True,'swarmhost', [200,100,3]),
+    (True,'viper', [100,200,3]),
+
+]}}
 
 
 ARMY_MAP, ARMY_INFO, COUNTS_AS_ARMY, UNITS  = {}, {}, {}, {}

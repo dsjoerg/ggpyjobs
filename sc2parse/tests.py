@@ -459,6 +459,13 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
         matchDBs = Match.objects.all()
         self.assertEquals(matchDBs[0].expansion, 1)
 
+    def test_lotv_replays(self):
+        for replayid in [27,28]:
+            replay = self.get_parsed_replay(replayid)
+            matchID, blob = self.parse_replay_persist_and_close(replayid)
+            matchDBs = Match.objects.all()
+            self.assertEquals(matchDBs[0].expansion, 2)
+
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()

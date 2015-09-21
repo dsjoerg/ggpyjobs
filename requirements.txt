@@ -19,9 +19,10 @@ pytz
 MySQL-python
 pyyaml
 pil
-#file:///Users/david/Dropbox/Programming/sc2reader_ggtracker/sc2reader#egg=sc2reader
--e git://github.com/ggtracker/sc2reader.git@846bfaf0b82b1f2ad28460b418370b7269297b91#egg=sc2reader
-#-e git+ssh://git@github.com/ggtracker/sc2reader_private.git@e0c4d6a32a4a9a86cdc3391b1dae4917e74c787a#egg=sc2reader
+#file:///Users/david/Dropbox/Programming/sc2reader/sc2reader#egg=sc2reader
+#-e git://github.com/ggtracker/sc2reader.git#egg=sc2reader
+-e git://github.com/ggtracker/sc2reader.git@e48f306873d163f4cafd38113638ae6ea6bf690a#egg=sc2reader
+
 enum34
 
 
