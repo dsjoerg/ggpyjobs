@@ -82,7 +82,7 @@ Install the various requirements. PIL may require external libraries to be insta
 * `pip install -r requirements.txt`
 
 Run the tests to verify a successful setup:
-> GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config DJANGO_SECRETKEY=foo ./manage.py test sc2parse
+> GGFACTORY_CACHE_DIR=testcache GGPYJOBS_CONFIG_PATH=config PYTHONPATH=src/sc2reader DJANGO_SECRETKEY=foo ./manage.py test sc2parse
 
 There will be some output; at the end, if all is well, it will say something like:
 ```
