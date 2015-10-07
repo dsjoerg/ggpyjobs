@@ -155,9 +155,11 @@ class SC2ReaderToEsdb():
       self.populateEntityFromReplay(entityDB, matchDB, player, replay)
       self.populateBlobFromReplay(blob, player, replay, playerToIdentityId)
 
-    self.populateBlobWithCamera(blob, replay, matchDB.map, playerToIdentityId)
+
     object_tracks = self.trackAllObjects(replay)
-    self.populateBlobWithLocations(blob, replay, matchDB.map, playerToIdentityId, object_tracks)
+    if matchDB.map is not None:
+      self.populateBlobWithCamera(blob, replay, matchDB.map, playerToIdentityId)
+      self.populateBlobWithLocations(blob, replay, matchDB.map, playerToIdentityId, object_tracks)
     self.populateBlobWithAggressions(blob, replay, playerToIdentityId, object_tracks)
     blob["armies_by_frame"] = army_map(replay, playerToIdentityId)
 
@@ -847,8 +849,6 @@ class SC2ReaderToEsdb():
 
   def populateMatchFromReplay(self, replay, matchDB):
 
-      mapDB = self.getOrCreateMap(replay)
-      matchDB.map = mapDB
       matchDB.release_string = replay.release_string
       matchDB.played_at = replay.start_time
 
@@ -868,6 +868,13 @@ class SC2ReaderToEsdb():
       else:
         matchDB.expansion = 0
       matchDB.gateway = normalize_gateway(replay.gateway)
+
+      try:
+        mapDB = self.getOrCreateMap(replay)
+        matchDB.map = mapDB
+      except:
+        print("Couldnt parse map. Oh well")
+        pass
 
       # highest_league is 8 for unranked matches.  so if none of the
       # players have highest_league of 8, we call it a ranked match
