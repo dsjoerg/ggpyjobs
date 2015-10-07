@@ -473,6 +473,18 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
             matchDBs = Match.objects.all()
             self.assertEquals(matchDBs[0].expansion, 1)
 
+    def dont_test_30_weirdness(self):
+        replayid = 31
+        replay = self.get_parsed_replay(replayid)
+        for player in replay.players:
+            print("Player {}".format(player))
+        matchID, blob = self.parse_replay_persist_and_close(replayid)
+        matchDBs = Match.objects.all()
+        self.extractReplayDetails(blob)
+        self.assertEquals(matchDBs[0].expansion, 1)
+        idDBs = Identity.objects.order_by('bnet_id').all()
+        entityDBs = Entity.objects.order_by('identities__bnet_id').all()
+            
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()
