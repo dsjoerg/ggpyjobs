@@ -704,12 +704,13 @@ def MiningBaseIdentifier(replay):
       return replay
 
     itemlist = xmldoc.getElementsByTagName('ObjectUnit')
-    mineralPosStrs = [ou.attributes['Position'].value for ou in itemlist if ou.attributes['UnitType'].value in ['MineralField', 'RichMineralField', 'LabMineralField']]
+    mfnames = ['MineralField', 'RichMineralField', 'LabMineralField', 'MineralField750', 'RichMineralField750', 'LabMineralField750']
+    mineralPosStrs = [ou.attributes['Position'].value for ou in itemlist if ou.attributes['UnitType'].value in mfnames]
     mineralLocs = [tuple([float(num) for num in mps.split(',')[0:2]]) for mps in mineralPosStrs]
 
     #print set([ou.attributes['UnitType'].value for ou in itemlist])
     #print mineralLocs
-    # mineralLocs = [obj.location for obj in replay.objects.values() if (obj.name in ['MineralField', 'RichMineralField', 'LabMineralField']) and hasattr(obj, 'location')]
+    # mineralLocs = [obj.location for obj in replay.objects.values() if (obj.name in mfnames) and hasattr(obj, 'location')]
 
 
     landOCCC = ['LandOrbitalCommand', 'LandCommandCenter']
@@ -834,7 +835,7 @@ def MiningBaseIdentifier(replay):
         player.miningbases = [(base,miningbases[base]) for base in miningbases.keys() if base.owner == player]
         player.miningbases = sorted(player.miningbases, key=lambda pair: pair[1])
         if debug_miningbases:
-            print "MINING BASES FOR {}".format(player)
+            print "MINING BASES FOR {}".format(player.name.encode('utf-8'))
             for basepair in player.miningbases:
                 print "At {}, {} first came to a mining location".format(framestr(basepair[1]), basepair[0])
             for base in player.bases:
