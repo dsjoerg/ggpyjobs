@@ -402,22 +402,6 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
             print extracted
 
 
-    def test_s2gs_then_replay(self):
-        matchID = self.parse_s2gs_persist_and_close(5)
-        newMatchID, blob = self.parse_replay_persist_and_close(5)
-        self.assertEquals(matchID, newMatchID)
-
-        self.verifyCondemnedRidgeReplay()
-        self.verifyCondemnedRidgeSummary()
-
-    def test_replay_then_s2gs(self):
-        matchID, blob = self.parse_replay_persist_and_close(5)
-        newMatchID = self.parse_s2gs_persist_and_close(5)
-        self.assertEquals(matchID, newMatchID)
-
-        self.verifyCondemnedRidgeReplay()
-        self.verifyCondemnedRidgeSummary()
-
     def test_s2gs_repeat(self):
         matchID = self.parse_s2gs_persist_and_close(5)
         newMatchID = self.parse_s2gs_persist_and_close(5)
