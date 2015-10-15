@@ -865,7 +865,6 @@ class SC2ReaderToEsdb():
         matchDB.expansion = 1
       elif replay.expansion == 'LotV':
         matchDB.expansion = 2
-        raise Exception("Cant handle LotV yet, time to die")
       else:
         matchDB.expansion = 0
       matchDB.gateway = normalize_gateway(replay.gateway)

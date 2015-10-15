@@ -172,6 +172,7 @@ unit_data = {'WoL':
     (True,'oracle', [150,150,3]),
     (True,'tempest', [300,200,4]),
     (True,'mothershipcore', [100,100,2]),
+    (True,'disruptor', [100,100,2]),
     #(True,'interceptor', [25,0,0]), # This is technically a army unit
 
 ],'Terran':[
