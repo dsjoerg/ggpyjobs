@@ -13,7 +13,7 @@ def framestr(frame):
 
 def get_unit_type(unit):
     is_building = unit.is_building and 'Crawler' not in unit.name # Crawlers are like units
-    if unit.name in ('Overseer','BroodLord') or is_building: # Overseers & BroodLords are treated as a separate units
+    if unit.name in ('Overseer','BroodLord','Ravager','Lurker') or is_building: # Overseers,BroodLords,Ravagers and Lurkers morph but they are their own units
         unit_type = unit.name.lower()
     elif unit.name in ('Viking','VikingAssault'):
         unit_type = 'viking'
