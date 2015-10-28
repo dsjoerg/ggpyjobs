@@ -22,7 +22,7 @@ pil
 
 #file:///Users/david/Dropbox/Programming/sc2reader/sc2reader#egg=sc2reader
 #-e git://github.com/ggtracker/sc2reader.git#egg=sc2reader
--e git://github.com/ggtracker/sc2reader.git@64217c7e7e1c0215f58ea49b9634214fd466790c
+-e git://github.com/ggtracker/sc2reader.git@64217c7e7e1c0215f58ea49b9634214fd466790c#egg=sc2reader
 
 enum34
 
