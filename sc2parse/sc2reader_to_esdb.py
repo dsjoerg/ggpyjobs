@@ -141,6 +141,8 @@ class SC2ReaderToEsdb():
     playerToEntity = {}
 
     for player in replay.players:
+      player.units = [u for u in player.units if u.name is not None]
+      player.killed_units = [u for u in player.killed_units if u.name is not None]
       idDB = self.getOrCreateIdentity(player, replay.start_time, replay.gateway, created)
       entityDB = self.getOrCreateEntity(matchDB, idDB)
 
@@ -432,7 +434,9 @@ class SC2ReaderToEsdb():
           # the standard transform takes camera-center SC2 coords and
           # translates them to upper-left bbox coords for the image.
           imageX, imageY = mapToImage(ot.x, ot.y)
-          trackedunits[ot.obj] = (ot.frame, imageX, imageY)
+          theobj = ot.obj
+          if theobj is not None and theobj.minerals is not None and theobj.vespene is not None and theobj.name is not None:
+            trackedunits[theobj] = (ot.frame, imageX, imageY)
           # print "{}: tracking {} (owner {}) at {}, {} which is {}, {}".format(ot.frame, ot.obj, ot.obj.owner, ot.x, ot.y, imageX, imageY)
 
 
