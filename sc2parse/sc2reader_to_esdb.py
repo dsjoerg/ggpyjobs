@@ -514,7 +514,7 @@ class SC2ReaderToEsdb():
         for unit, unitloc in trackedunits.items():
             if ot.frame > unit.died_at:
                 del trackedunits[unit]
-            if ot.frame < unit.died_at and unit.owner is not None and unit.owner in replay.players:
+            if ot.frame < unit.died_at and unit.owner is not None and unit.owner in replay.players and unit.name is not None:
                 unitname = unit.name.lower()
                 if COUNTS_AS_ARMY.get(unitname):
                   strength = army_strength(replay.expansion, unitname)
