@@ -709,8 +709,7 @@ def MiningBaseIdentifier(replay):
       return replay
 
     itemlist = xmldoc.getElementsByTagName('ObjectUnit')
-    mfnames = ['MineralField', 'RichMineralField', 'LabMineralField', 'MineralField750', 'RichMineralField750', 'LabMineralField750']
-    mineralPosStrs = [ou.attributes['Position'].value for ou in itemlist if ou.attributes['UnitType'].value in mfnames]
+    mineralPosStrs = [ou.attributes['Position'].value for ou in itemlist if 'MineralField' in ou.attributes['UnitType'].value]
     mineralLocs = [tuple([float(num) for num in mps.split(',')[0:2]]) for mps in mineralPosStrs]
 
     #print set([ou.attributes['UnitType'].value for ou in itemlist])
