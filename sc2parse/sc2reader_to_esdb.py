@@ -257,7 +257,10 @@ class SC2ReaderToEsdb():
               setattr(player,attr_name, sum(values)/len(values))
 
       for player in players_we_track:
-          player.average_resource_collection_rate = player.average_vespene_collection_rate + player.average_minerals_collection_rate
+          # starting with 3.2 the resource collection rates were reported as faster numbers.
+          # we shift them back so that we dont have to make changes everywhere else and deal with a discontinuity
+          player.average_resource_collection_rate = (player.average_vespene_collection_rate + player.average_minerals_collection_rate) / 1.36
+          
           player.average_unspent_resources = player.average_unspent_minerals + player.average_unspent_vespene
           player.workers_created = len([u for u in player.units if (u.is_worker and u.finished_at is not None)])
 
