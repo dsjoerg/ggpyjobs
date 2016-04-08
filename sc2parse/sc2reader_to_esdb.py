@@ -215,8 +215,10 @@ class SC2ReaderToEsdb():
                   matchblob['Lost'][ident_id].append(pstats.resources_lost)
                   matchblob['VespeneCurrent'][ident_id].append(pstats.vespene_current)
                   matchblob['MineralsCurrent'][ident_id].append(pstats.minerals_current)
-                  matchblob['VespeneCollectionRate'][ident_id].append(pstats.vespene_collection_rate)
-                  matchblob['MineralsCollectionRate'][ident_id].append(pstats.minerals_collection_rate)
+                  # starting with 3.2 the resource collection rates were reported as faster numbers.
+                  # we shift them back so that we dont have to make changes everywhere else and deal with a discontinuity
+                  matchblob['VespeneCollectionRate'][ident_id].append(pstats.vespene_collection_rate / 1.36)
+                  matchblob['MineralsCollectionRate'][ident_id].append(pstats.minerals_collection_rate / 1.36)
                   matchblob['WorkersActiveCount'][ident_id].append(pstats.workers_active_count)
                   matchblob['SupplyUsage'][ident_id].append((pstats.food_used, pstats.food_made))
           else:
@@ -257,10 +259,7 @@ class SC2ReaderToEsdb():
               setattr(player,attr_name, sum(values)/len(values))
 
       for player in players_we_track:
-          # starting with 3.2 the resource collection rates were reported as faster numbers.
-          # we shift them back so that we dont have to make changes everywhere else and deal with a discontinuity
-          player.average_resource_collection_rate = (player.average_vespene_collection_rate + player.average_minerals_collection_rate) / 1.36
-          
+          player.average_resource_collection_rate = (player.average_vespene_collection_rate + player.average_minerals_collection_rate)
           player.average_unspent_resources = player.average_unspent_minerals + player.average_unspent_vespene
           player.workers_created = len([u for u in player.units if (u.is_worker and u.finished_at is not None)])
 
