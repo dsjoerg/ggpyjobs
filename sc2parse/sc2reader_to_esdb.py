@@ -3,7 +3,7 @@ from collections import defaultdict
 from datetime import datetime
 from datetime import timedelta
 from time import strftime
-import Image
+from PIL import Image
 import StringIO
 import hashlib
 import json

@@ -18,11 +18,12 @@ wsgiref==0.1.2
 pytz
 MySQL-python
 pyyaml
-pil
+Pillow
 
 #file:///Users/david/Dropbox/Programming/sc2reader/sc2reader#egg=sc2reader
 #-e git://github.com/ggtracker/sc2reader.git#egg=sc2reader
--e git://github.com/ggtracker/sc2reader.git@4d421471cda8d8605e91d96425445badd36f2e5f#egg=sc2reader
+#-e git://github.com/ggtracker/sc2reader.git@4d421471cda8d8605e91d96425445badd36f2e5f#egg=sc2reader
+-e git://github.com/nickelsen/sc2reader.git@5e6e235fa399dc691519d38faa11d71667b69002#egg=sc2reader
 
 enum34
 
