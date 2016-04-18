@@ -20,10 +20,7 @@ MySQL-python
 pyyaml
 Pillow
 
-#file:///Users/david/Dropbox/Programming/sc2reader/sc2reader#egg=sc2reader
-#-e git://github.com/ggtracker/sc2reader.git#egg=sc2reader
--e git://github.com/ggtracker/sc2reader.git@504fff2ed926c206b9aa74c70bbc017bb7c40718#egg=sc2reader
-#-e git://github.com/nickelsen/sc2reader.git@5e6e235fa399dc691519d38faa11d71667b69002#egg=sc2reader
+-e git://github.com/ggtracker/sc2reader.git@upstream#egg=sc2reader
 
 enum34
 
