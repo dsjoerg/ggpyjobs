@@ -1129,7 +1129,7 @@ def ZergMacroTracker(replay):
     for player in replay.players:
         player.hatches = dict()
 
-    efilter = lambda e: e.name == "TargetAbilityEvent" and hasattr(e, "ability") and e.ability_name == 'SpawnLarva'
+    efilter = lambda e: e.name.endswith("TargetAbilityEvent") and hasattr(e, "ability") and e.ability_name == "SpawnLarva"
     for event in filter(efilter, replay.events):
         owner = event.player
         target_hatch = event.target
