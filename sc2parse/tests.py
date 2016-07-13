@@ -555,6 +555,19 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
       after = datetime.now()
       print after - before
 
+    def test_zerg_macro_injects(self):
+        # FIXME: Not handling queued injects in LOTV (ggtrackerstack issue#50)
+        # Will need tests for expansions < LOTV as well
+        replay = self.get_parsed_replay(33)
+
+        hatches = sorted(replay.players[1].hatches.itervalues())
+        injects = [h.injects for h in hatches]
+        self.assertEqual(injects, [
+            [3774, 4508, 5297, 6343, 7346, 8147, 9668],
+            [3811, 4518, 5307, 6352, 7355, 8155, 9678],
+            [],
+        ])
+
 
 class SC2ReaderToEsdbPKDependentTestCases(TransactionTestCase):
     reset_sequences = True
