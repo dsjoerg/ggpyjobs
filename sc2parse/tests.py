@@ -480,7 +480,10 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
         for player in replay.players:
             print("Player {}: {}".format(player.name.encode('utf-8'), player.miningbases))
             self.assertTrue(len(player.miningbases) > 0)
-            
+
+    def test_34(self):
+        replay = self.get_parsed_replay(34)
+
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()
