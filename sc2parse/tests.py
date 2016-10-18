@@ -484,6 +484,10 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
     def test_34(self):
         replay = self.get_parsed_replay(34)
 
+    def test_37(self):
+        replay = self.get_parsed_replay(35)
+        replay = self.get_parsed_replay(36)
+
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()
