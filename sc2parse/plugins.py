@@ -1279,7 +1279,7 @@ def ProtossTerranMacroTracker(replay):
             if hasattr(base, 'energy') and hasattr(base, 'location') and base.energy > ability_cost:
                 if not hasattr(event, 'location'):
                     print "How can this event have no location?!"
-                    print "event {}".format(event)
+                    print "event {}".format(event.__str__().encode('utf-8'))
                     return None
                 #print "considering base {} by location/energy".format(base)
                 diff_x = base.location[0] - event.location[0]
