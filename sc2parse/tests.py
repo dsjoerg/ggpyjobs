@@ -488,6 +488,26 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
         replay = self.get_parsed_replay(35)
         replay = self.get_parsed_replay(36)
 
+    def test_37_fallout_1(self):
+# AttributeError: 'Unit' object has no attribute 'chronoboosts'
+        replay = self.get_parsed_replay(37)
+
+    def test_37_fallout_2(self):
+# AttributeError: 'Unit' object has no attribute 'chronoboosts'
+        replay = self.get_parsed_replay(38)
+
+    def test_37_fallout_3(self):
+# AttributeError: 'Unit' object has no attribute 'chronoboosts'
+        replay = self.get_parsed_replay(39)
+        
+    def test_37_fallout_4(self):
+# UnicodeEncodeError: 'ascii' codec can't encode characters in position 6-9: ordinal not in range(128)
+        replay = self.get_parsed_replay(40)
+
+    def test_37_fallout_5(self):
+# UnicodeEncodeError: 'ascii' codec can't encode characters in position 6-9: ordinal not in range(128)
+        replay = self.get_parsed_replay(41)
+
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()
