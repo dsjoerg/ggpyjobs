@@ -508,6 +508,13 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
 # UnicodeEncodeError: 'ascii' codec can't encode characters in position 6-9: ordinal not in range(128)
         replay = self.get_parsed_replay(41)
 
+    def test_stepan(self):
+        replay = self.parse_replay_persist_and_close(42)
+        entityDBs = Entity.objects.all()
+        self.assertEquals(entityDBs.count(), 2)
+        for entity in entityDBs:
+            self.assertEquals(entity.race, 'P')
+        
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()

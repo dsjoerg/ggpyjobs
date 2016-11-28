@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # Built-ins
 from collections import defaultdict
 from datetime import datetime
@@ -963,12 +965,24 @@ class SC2ReaderToEsdb():
     else:
       return None
 
+  def latinize_race(self,race):
+    if race in ['T','P','Z']:
+      return race
+    urace = unicode(race)
+    if urace == u'Т':
+      return 'T'
+    if urace == u'П':
+      return 'P'
+    if urace == u'З':
+      return 'Z'
+    return 'U'
+    
   # also populates per-minute data for the entity
   @transaction.commit_on_success
   def populateEntityFromReplay(self, entityDB, matchDB, player, replay):
     entityDB.team=player.team.number
-    entityDB.chosen_race=player.pick_race[0]
-    entityDB.race=player.play_race[0]
+    entityDB.chosen_race=self.latinize_race(player.pick_race[0])
+    entityDB.race=self.latinize_race(player.play_race[0])
     entityDB.win=self.didPlayerWin(player)
     entityDB.color=player.color.hex
 
