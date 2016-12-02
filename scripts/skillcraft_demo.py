@@ -55,7 +55,7 @@ for player in replay.players:
         print "{:<5}\t{: <70}\tdisp={:.1f} / not an action".format(e.frame, e, (maxx - minx) + (maxy - miny))
     else:
       if fixation_start_frame > 0 and firstevent is None:
-        if (isinstance(e, GetFromHotkeyEvent)):
+        if (isinstance(e, GetControlGroupEvent)):
           if verbose:
             print "{:<5}\t{: <70}\tIGNORED, latency would have been={}".format(e.frame, e, e.frame - fixation_start_frame)
         elif isinstance(e, SelectionEvent) and len(e.new_unit_info) == 0:
