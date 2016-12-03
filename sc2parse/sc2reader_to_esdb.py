@@ -800,7 +800,7 @@ class SC2ReaderToEsdb():
           # ggpyjobs#15 - Use the s2ma map name if available in english
           map_name = replay.map.name or replay.map_name
           mapDB.name=map_name
-          mapDB.gateway=replay.gateway
+          mapDB.gateway=replay.region
           mapDB.save()
 
       if mapDB.transX is None:
