@@ -28,7 +28,7 @@ from django.conf import settings
 
 from sc2parse import ggfactory
 from sc2parse.plugins import MAX_NUM_UNITS, COUNTS_AS_ARMY, ARMY_MAP, army_strength, get_unit_type
-from sc2reader.events import CameraEvent, GetFromHotkeyEvent, SelectionEvent, TargetAbilityEvent, UnitPositionsEvent, PlayerStatsEvent, UnitBornEvent, UnitInitEvent
+from sc2reader.events import CameraEvent, GetControlGroupEvent, SelectionEvent, TargetUnitCommandEvent, UnitPositionsEvent, PlayerStatsEvent, UnitBornEvent, UnitInitEvent
 from sc2reader.utils import Length
 
 FRONTEND_TIME_UNITS = 999.0
@@ -52,7 +52,7 @@ class ObjectTrack:
 
   def __str__(self):
     return "obj={}, x={}, y={}, time={}".format(self.obj, self.x, self.y, Length(seconds=int(self.frame/16)))
-    
+
 
 def normalize_gateway(gateway):
     # This guy: http://sea.battle.net/sc2/en/profile/385029/1/Simon/
@@ -145,7 +145,7 @@ class SC2ReaderToEsdb():
     for player in replay.players:
       player.units = [u for u in player.units if u.name is not None]
       player.killed_units = [u for u in player.killed_units if u.name is not None]
-      idDB = self.getOrCreateIdentity(player, replay.start_time, replay.gateway, created)
+      idDB = self.getOrCreateIdentity(player, replay.start_time, replay.region, created)
       entityDB = self.getOrCreateEntity(matchDB, idDB)
 
       if player.toon_id > 0:
@@ -323,13 +323,13 @@ class SC2ReaderToEsdb():
 
     efilter = lambda e: hasattr(e, 'player') or e.name in ['UnitBornEvent', 'UnitInitEvent', 'UnitPositionsEvent']
     for event in filter(efilter, replay.events):
-          if isinstance(event, CameraEvent) and isinstance(lastEvent[event.player], GetFromHotkeyEvent) and event.frame - lastEvent[event.player].frame < MAX_HOTKEY_JUMP_FRAMES:
+          if isinstance(event, CameraEvent) and isinstance(lastEvent[event.player], GetControlGroupEvent) and event.frame - lastEvent[event.player].frame < MAX_HOTKEY_JUMP_FRAMES:
               for obj in lastEvent[event.player].selected:
                   object_tracks.append(ObjectTrack(obj, event.x, event.y, event.frame))
           if isinstance(event, SelectionEvent) and event.bank == 10 and len(event.objects) > 0 and event.player in lastCamera:
               for obj in event.objects:
                   object_tracks.append(ObjectTrack(obj, lastCamera[event.player][0], lastCamera[event.player][1], event.frame))
-          if isinstance(event, TargetAbilityEvent) and event.location is not None:
+          if isinstance(event, TargetUnitCommandEvent) and event.location is not None:
               object_tracks.append(ObjectTrack(event.target, event.location[0], event.location[1], event.frame))
           if isinstance(event, CameraEvent):
               lastCamera[event.player] = (event.x, event.y)
@@ -343,7 +343,7 @@ class SC2ReaderToEsdb():
               lastEvent[event.player] = event
 
     return object_tracks
-    
+
 
   # locations is a list of length FRONTEND_TIME_UNITS showing, for
   # each time unit, where various player stuff is
@@ -461,7 +461,7 @@ class SC2ReaderToEsdb():
       sqdist = deltax * deltax + deltay * deltay
       if sqdist < min_sq_dist:
         min_sq_dist = sqdist
-        
+
     return math.sqrt(min_sq_dist)
 
 
@@ -475,7 +475,7 @@ class SC2ReaderToEsdb():
       return AggressionLevel.EnemyBaseSeen
     if dist_to_enemy_base <= 40:
       return AggressionLevel.EnemyBaseClose
-    
+
     dist_to_our_base = self.distToNearestBase(frame, location, player.bases)
     if dist_to_our_base <= 10:
       return AggressionLevel.OurBaseSeen
@@ -483,7 +483,7 @@ class SC2ReaderToEsdb():
       return AggressionLevel.OurBaseClose
 
     return AggressionLevel.NoMansLand
-    
+
 
   # aggressions is a map of player to
   # a list of aggression snapshots.  each aggression snapshot is a list:
@@ -537,7 +537,7 @@ class SC2ReaderToEsdb():
 
 
   def populateBlobWithAggressions(self, blob, replay, ptoi, object_tracks):
-    
+
     # logic for team games isn't right yet, would need to look at all enemy bases
     if len(replay.players) > 2:
       return
@@ -800,7 +800,7 @@ class SC2ReaderToEsdb():
           # ggpyjobs#15 - Use the s2ma map name if available in english
           map_name = replay.map.name or replay.map_name
           mapDB.name=map_name
-          mapDB.gateway=replay.gateway
+          mapDB.gateway=replay.region
           mapDB.save()
 
       if mapDB.transX is None:
@@ -839,7 +839,7 @@ class SC2ReaderToEsdb():
     # Is this match already in our DB? First, look for the player in our DB
     # TODO what if player 0 is an AI?!
 
-    firstIdentityDB = self.getOrCreateIdentity(replay.players[0], replay.start_time, replay.gateway, False)
+    firstIdentityDB = self.getOrCreateIdentity(replay.players[0], replay.start_time, replay.region, False)
 
     # If we dont have the player, then we can't have the match. Just
     # create it and be done.
@@ -875,7 +875,7 @@ class SC2ReaderToEsdb():
         matchDB.expansion = 2
       else:
         matchDB.expansion = 0
-      matchDB.gateway = normalize_gateway(replay.gateway)
+      matchDB.gateway = normalize_gateway(replay.region)
 
       try:
         mapDB = self.getOrCreateMap(replay)
@@ -906,8 +906,8 @@ class SC2ReaderToEsdb():
     # the identity's gateway will be the player's gateway, unless the
     # player has no gateway (so far this is known to happen only with
     # computer players), in which case we use the replay's gateway
-    if player.gateway is not None and player.gateway.strip() != '':
-        gateway = player.gateway
+    if player.region is not None and player.region.strip() != '':
+        gateway = player.region
 
     #
     # In order to have multiple processes simultaneously parsing and persisting,
@@ -976,7 +976,7 @@ class SC2ReaderToEsdb():
     if urace == u'З':
       return 'Z'
     return 'U'
-    
+
   # also populates per-minute data for the entity
   @transaction.commit_on_success
   def populateEntityFromReplay(self, entityDB, matchDB, player, replay):
@@ -1071,7 +1071,7 @@ class SC2ReaderToEsdb():
               # http://stackoverflow.com/questions/6416213/is-get-or-create-thread-safe/9400486#9400486
               #
               blizID, created = Identity.objects.get_or_create(
-                  gateway=normalize_gateway(summary.gateway),
+                  gateway=normalize_gateway(summary.region),
                   bnet_id=player.bnetid,
                   subregion=player.subregion)
               blizID.type='ESDB::Sc2::Identity'
@@ -1336,7 +1336,7 @@ class SC2ReaderToEsdb():
     highest_leagues = [player.highest_league for player in replay.humans]
 
     for player in replay.players:
-      idDB = self.getOrCreateIdentity(player, replay.start_time, replay.gateway, False)
+      idDB = self.getOrCreateIdentity(player, replay.start_time, replay.region, False)
       entityDB = self.getOrCreateEntity(matchDB, idDB)
       if player.toon_id > 0:
         playerToIdentityId[player] = idDB.id

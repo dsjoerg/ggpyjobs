@@ -263,7 +263,7 @@ def WWPMTracker(replay, ww_length_frames, workers=set(["TrainProbe", "MorphDrone
     # Tracker only needed for pre-2.0.8 replays
     if replay.build >= 25446: return replay
 
-    efilter = lambda e: isinstance(e, AbilityEvent) and e.ability_name in workers
+    efilter = lambda e: isinstance(e, BasicCommandEvent) and e.ability_name in workers
     for player in replay.players:
         player.wwpm = defaultdict(int)
         last_worker_built = -ww_length_frames
@@ -301,7 +301,7 @@ def ActivityTracker(replay):
         if obj.last_activity == None or obj.last_activity < frame:
             obj.last_activity = frame
 
-    efilter = lambda e: isinstance(e, SelectionEvent) or isinstance(e, GetFromHotkeyEvent)
+    efilter = lambda e: isinstance(e, SelectionEvent) or isinstance(e, GetControlGroupEvent)
     for event in filter(efilter, replay.events):
         # Mark all currently selected units
         for obj in event.selected:
@@ -322,7 +322,7 @@ def ActivityTracker(replay):
             mark_activity(obj, replay.frames)
 
     # Mark Ability Target Activity
-    efilter = lambda e: isinstance(e, TargetAbilityEvent) and e.target
+    efilter = lambda e: isinstance(e, TargetUnitCommandEvent) and e.target
     for event in filter(efilter, replay.events):
         mark_activity(event.target, event.frame)
 
@@ -404,7 +404,7 @@ def OwnershipTracker(replay):
 
         # a player can only select more than one unit at a time when selecting her own units
         # warning: also shared control units, can't detect that though
-        efilter = lambda e: isinstance(e, SelectionEvent) or isinstance(e, HotkeyEvent)
+        efilter = lambda e: isinstance(e, SelectionEvent) or isinstance(e, CommandEvent)
         for event in filter(efilter, player.events):
             current_selection = player_selection[event.frame][0x0A].objects
             if len(current_selection) > 1:
@@ -412,7 +412,7 @@ def OwnershipTracker(replay):
 
         # a player can only issue orders to her own units
         # warning: also a shared control unit, can't detect that though
-        efilter = lambda e: isinstance(e, AbilityEvent)
+        efilter = lambda e: isinstance(e, BasicCommandEvent)
         for event in filter(efilter, player.events):
             mark_ownership(player_selection[event.frame][0x0A].objects, player)
 
@@ -701,7 +701,7 @@ def MiningBaseIdentifier(replay):
     except Exception as e:
       print "Couldn't load map. Won't compute mining bases"
       return replay
-    
+
     try:
       xmldoc = minidom.parseString(replay.map.archive.read_file('Objects'))
     except Exception as e:
@@ -756,15 +756,15 @@ def MiningBaseIdentifier(replay):
 #       isMiningLoc(mineralLocs, event.location)
 #    return replay
 
-    efilter = lambda e: (e.name == 'LocationAbilityEvent' and e.ability_name in landOCCC) or \
+    efilter = lambda e: (e.name == 'TargetPointCommandEvent' and e.ability_name in landOCCC) or \
               (e.name == 'UnitTypeChangeEvent' and e.unit_type_name in OCCC_names) or \
               (e.name in ['UnitDoneEvent', 'UnitInitEvent'] and e.unit is not None and e.unit.name in base_names) or \
-              (e.name == "LocationAbilityEvent" and e.ability_name in build_base_names)
+              (e.name == "TargetPointCommandEvent" and e.ability_name in build_base_names)
     for event in filter(efilter, replay.events):
         if hasattr(event, 'unit') and event.unit.owner is None:
           # crazy, but some misparsed replays have events with units without a known owner
           continue
-        if event.name == 'LocationAbilityEvent':
+        if event.name == 'TargetPointCommandEvent':
           if event.ability_name in landOCCC:
             selecteds = event.player.selection[event.frame][10].objects
             selected_occcs = [obj for obj in selecteds if obj.type_history.values()[0].name == 'CommandCenter']
@@ -821,7 +821,7 @@ def MiningBaseIdentifier(replay):
             # now the base is landed or done being constructed.
             if debug_miningbases and debuglevel_miningbases >= 1:
                 print "{}'s {} did {} at {}".format(event.unit.owner, event.unit, event.name, framestr(event.frame))
-              
+
             if event.unit in baselocations and event.unit not in miningbases:
                 if debug_miningbases and debuglevel_miningbases >= 1:
                     print "and it is at {}".format(baselocations[event.unit])
@@ -877,7 +877,7 @@ def BaseTracker(replay):
     # easiest field to explain, so we are planning to use it.
 
     # confirmed_at.  The frame of the SelectionEvent or
-    # TargetAbilityEvent which confirmed the existence of the Base to
+    # TargetUnitCommandEvent which confirmed the existence of the Base to
     # us.  It very well may have been under construction at that time.
     # Special-case: 0 for each player's initial base.
 
@@ -1001,7 +1001,7 @@ def BaseTracker(replay):
             event.player.camera = (event.x, event.y)
 
         # Capture Base Build Commands
-        if event.name == "LocationAbilityEvent" and event.ability_name in ['BuildHatchery','BuildNexus','BuildCommandCenter']:
+        if event.name == "TargetPointCommandEvent" and event.ability_name in ['BuildHatchery','BuildNexus','BuildCommandCenter']:
             #print divmod(event.frame/16, 60), event.player, event.ability_name, event.location
             x,y,z = event.location
             base_type = event.ability_name[5:]
@@ -1057,7 +1057,7 @@ def BaseTracker(replay):
 
         # Sometimes a base will be targeted (by an enemy, or perhaps
         # your queen) before it is Selected.  We can use the Target event as our clue that the building exists.
-        if event.name == "TargetAbilityEvent" and (event.target.name in base_names):
+        if event.name == "TargetUnitCommandEvent" and (event.target.name in base_names):
             base = event.target
             if base not in known_bases:
                 x,y = event.player.camera
@@ -1129,7 +1129,7 @@ def ZergMacroTracker(replay):
     for player in replay.players:
         player.hatches = dict()
 
-    efilter = lambda e: e.name.endswith("TargetAbilityEvent") and hasattr(e, "ability") and e.ability_name == "SpawnLarva"
+    efilter = lambda e: e.name.endswith("TargetUnitCommandEvent") and hasattr(e, "ability") and e.ability_name == "SpawnLarva"
     for event in filter(efilter, replay.events):
         owner = event.player
         target_hatch = event.target
@@ -1535,7 +1535,7 @@ def EngagementTracker(replay):
                 killed_econ[dead.owner.team] += deadvalue
                 if debug_engagement and debuglevel >= 1 and deadvalue > 0:
                     print "eco killed @ {}: {} {}".format(dead.died_at, dead.name, deadvalue)
-                
+
         for unit in owned_units:
             if unit.finished_at < engagement[1] and unit.died_at >= engagement[1]:
                 stuff_at_start[unit.owner.team] += unit.minerals + unit.vespene
@@ -1632,7 +1632,7 @@ def MinimumBaseDistance(replay):
       minimumDistance = dist
 
   return minimumDistance
-      
+
 
 # this plugin sets player.first_scout_command_frame to the frame in
 # which the first scout command was issued.
@@ -1656,7 +1656,7 @@ def ScoutingTracker(replay):
   mbd = MinimumBaseDistance(replay)
   half_mbd_squared = (mbd / 2.0) ** 2
 
-  efilter = lambda e: (isinstance(e, LocationAbilityEvent) or isinstance(e, TargetAbilityEvent))
+  efilter = lambda e: (isinstance(e, TargetPointCommandEvent) or isinstance(e, TargetUnitCommandEvent))
   for player in replay.players:
 
     player.first_scout_command_frame = None

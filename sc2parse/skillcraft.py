@@ -172,7 +172,7 @@ def PACStats(replay):
 
   for player in replay.players:
     action_latencies = []
-    action_filter = lambda e: not (isinstance(e, CameraEvent) or isinstance(e, GetFromHotkeyEvent) or (isinstance(e, SelectionEvent) and len(e.new_unit_info) == 0))
+    action_filter = lambda e: not (isinstance(e, CameraEvent) or isinstance(e, GetControlGroupEvent) or (isinstance(e, SelectionEvent) and len(e.new_unit_info) == 0))
     actions = filter(action_filter, player.events)
     action_index = 0
 
