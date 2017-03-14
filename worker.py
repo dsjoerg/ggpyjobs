@@ -31,7 +31,7 @@ class gg(Daemon):
       setup_logging(procname="pyres_worker", log_level='INFO')
     
     # setup_pidfile(options.pidfile)
-    Worker.run(['python', 'python-low', 'python-bg'], settings.REDIS_SERVER)
+    Worker.run(['python', 'python-low', 'python-bg'], settings.REDIS_SERVER, timeout=600)
 
 if __name__ == "__main__":
   parser = OptionParser()
