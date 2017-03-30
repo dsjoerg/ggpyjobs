@@ -514,7 +514,10 @@ class SC2ReaderToEsdbTestCase(unittest.TestCase):
         self.assertEquals(entityDBs.count(), 2)
         for entity in entityDBs:
             self.assertEquals(entity.race, 'P')
-        
+
+    def test_20170330(self):
+        replay = self.get_parsed_replay(43)
+            
     def test_hots_s2gs(self):
         self.parse_s2gs_persist_and_close(12)
         matchDBs = Match.objects.all()
